@@ -5,6 +5,12 @@ interface IUser {
   password?: string;
 }
 
+interface IStocksListInfo {
+  search?: string;
+  count?: number;
+  itemId?: number;
+}
+
 const mocksURL = 'https://stocks-mocks.herokuapp.com/api';
 
 export default class Api {
@@ -24,5 +30,13 @@ export default class Api {
 
   signIn(user: IUser) {
     return this.http.post('/auth/signin', user).then(({ data }) => data);
+  }
+
+  getAccountInfo() {
+    return this.http.get('/account/info').then(({ data }) => data);
+  }
+
+  getStocks(stocksListInfo: IStocksListInfo) {
+    return this.http.post('/stocks', stocksListInfo).then(({ data }) => data);
   }
 }

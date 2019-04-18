@@ -1,6 +1,14 @@
 import React, { Component, Fragment } from 'react';
 
-import { Paper, Grid, Typography, List, ListItem, Divider } from '@material-ui/core';
+import {
+  Paper,
+  Grid,
+  Typography,
+  List,
+  ListItem,
+  Divider,
+  ListSubheader
+} from '@material-ui/core';
 import StockItem from '../stockItem/StockItem';
 
 import { withStyles, createStyles, Theme, WithStyles } from '@material-ui/core/styles';
@@ -37,10 +45,13 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      padding: theme.spacing.unit * 2
+      padding: theme.spacing.unit
     },
     list: {
       backgroundColor: theme.palette.background.paper
+    },
+    listHeading: {
+      fontSize: '18px'
     }
   });
 
@@ -52,7 +63,14 @@ class StocksList extends Component<IProps> {
 
     return (
       <Paper className={classes.root}>
-        <List>
+        <List
+          subheader={
+            <ListSubheader className={classes.listHeading} component="div">
+              Акции
+              {/* <Typography variant="subheading">Акции</Typography> */}
+            </ListSubheader>
+          }
+        >
           {items.items.map(item => (
             <Fragment>
               <ListItem>

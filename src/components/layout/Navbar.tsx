@@ -11,6 +11,8 @@ import { withStyles, createStyles, Theme, WithStyles } from '@material-ui/core/s
 
 import { connect } from 'react-redux';
 
+import { IState } from '../../store';
+
 const styles = (theme: Theme) =>
   createStyles({
     root: {
@@ -38,11 +40,13 @@ const styles = (theme: Theme) =>
   });
 
 export interface Props extends WithStyles<typeof styles> {
-  isAuthed: boolean;
+  auth?: {
+    isAuthed: boolean;
+  };
 }
 
 const Navbar: React.FunctionComponent<Props> = (props: Props) => {
-  const { classes, isAuthed } = props;
+  const { classes, auth } = props;
 
   // const handleLogoutClick = () => {
   //   if (isAuthed) {
@@ -56,23 +60,39 @@ const Navbar: React.FunctionComponent<Props> = (props: Props) => {
         <ToolBar>
           <Link component={(props: any) => <RouterLink {...props} to="/" />}>
             <Typography variant="h5" className={classes.logo} noWrap>
-              Fake Invest
+              Darya Invest
             </Typography>
           </Link>
 
           <div className={classes.grow} />
 
-          <Button
-            color="secondary"
-            className={classes.navListItem}
-            component={(props: any) => (
-              <RouterLink {...props} to="/stocks">
-                {props.children}
-              </RouterLink>
-            )}
-          >
-            Акции
-          </Button>
+          {auth && auth.isAuthed && (
+            <Button
+              color="secondary"
+              className={classes.navListItem}
+              component={(props: any) => (
+                <RouterLink {...props} to="/stocks">
+                  {props.children}
+                </RouterLink>
+              )}
+            >
+              Акции
+            </Button>
+          )}
+          {auth && auth.isAuthed && (
+            <Button
+              color="secondary"
+              className={classes.navListItem}
+              component={(props: any) => (
+                <RouterLink {...props} to="/account">
+                  {props.children}
+                </RouterLink>
+              )}
+            >
+              Мой портфель
+            </Button>
+          )}
+
           <Button
             variant="outlined"
             color="secondary"
@@ -83,7 +103,7 @@ const Navbar: React.FunctionComponent<Props> = (props: Props) => {
               </RouterLink>
             )}
           >
-            {isAuthed ? 'Войти' : 'Выйти'}
+            {auth && auth.isAuthed ? 'Выйти' : 'Войти'}
           </Button>
         </ToolBar>
       </AppBar>
@@ -91,8 +111,8 @@ const Navbar: React.FunctionComponent<Props> = (props: Props) => {
   );
 };
 
-const mapStateToProps = (state: any) => ({
-  isAuthed: state.isAuthed
+const mapStateToProps = (state: IState) => ({
+  auth: state.auth
 });
 
 export default connect(mapStateToProps)(withStyles(styles)(Navbar));

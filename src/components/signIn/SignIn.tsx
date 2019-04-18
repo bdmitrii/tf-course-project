@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import FormControl from '@material-ui/core/FormControl';
@@ -9,7 +8,10 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { withStyles, createStyles, Theme, WithStyles } from '@material-ui/core/styles';
 
+import { connect } from 'react-redux';
+
 import { Link as RouterLink } from 'react-router-dom';
+import { signInAction } from '../../actions/authActions';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -48,9 +50,16 @@ const styles = (theme: Theme) =>
     }
   });
 
-interface IProps extends WithStyles<typeof styles> {}
+interface IProps extends WithStyles<typeof styles> {
+  signIn?: typeof signInAction;
+}
 
-class SignIn extends Component<IProps> {
+interface IState {
+  login: string;
+  password: string;
+}
+
+class SignIn extends Component<IProps, Partial<IState>> {
   constructor(props: IProps) {
     super(props);
 
@@ -65,7 +74,21 @@ class SignIn extends Component<IProps> {
     this.setState({ [e.currentTarget.name]: e.currentTarget.value });
   };
 
-  onSubmit() {}
+  handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const { signIn } = this.props;
+    console.log(signIn);
+
+    const user = {
+      login: this.state.login,
+      password: this.state.password
+    };
+
+    if (signIn) {
+      console.log(signIn(user));
+    }
+  };
 
   render() {
     const { classes } = this.props;
@@ -77,7 +100,7 @@ class SignIn extends Component<IProps> {
           <Typography component="h1" variant="h5">
             Войти
           </Typography>
-          <form className={classes.form}>
+          <form className={classes.form} onSubmit={this.handleSubmit}>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="login">Логин</InputLabel>
               <Input
@@ -128,4 +151,7 @@ class SignIn extends Component<IProps> {
   }
 }
 
-export default withStyles(styles)(SignIn);
+export default connect(
+  null,
+  { signIn: signInAction }
+)(withStyles(styles)(SignIn));

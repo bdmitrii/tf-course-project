@@ -1,9 +1,15 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
-import { watchSignUp } from './sagas/authSaga';
+import rootSaga from './sagas';
 
 import rootReducer from './reducers';
+
+export interface IState {
+  auth?: {
+    isAuthed: boolean;
+  };
+}
 
 declare global {
   interface Window {
@@ -21,6 +27,6 @@ const enhancer = composeEnhancers(applyMiddleware(...middlewares));
 
 const store = createStore(rootReducer, initialState, enhancer);
 
-sagaMiddleware.run(watchSignUp);
+sagaMiddleware.run(rootSaga);
 
 export default store;

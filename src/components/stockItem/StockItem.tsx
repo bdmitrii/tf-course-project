@@ -12,7 +12,10 @@ const styles = (theme: Theme) =>
     }
   });
 
-interface IProps extends WithStyles<typeof styles> {}
+interface IProps extends WithStyles<typeof styles> {
+  // name: string;
+  // price;
+}
 
 function StockItem({ classes }: IProps) {
   return (

@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import PrivateRoute from './components/common/PrivateRoute';
 
 import store from './store';
 import { Provider } from 'react-redux';
@@ -10,7 +11,8 @@ import withRoot from './theme/withRoot';
 import Navbar from './components/layout/Navbar';
 import SignIn from './components/signIn/SignIn';
 import SignUp from './components/signUp/SignUp';
-import StocksList from './components/stocksList/StocksList';
+import Stocks from './containers/stocks/Stocks';
+import Account from './containers/account/Account';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 
@@ -33,7 +35,8 @@ class App extends Component {
           <Navbar />
           <Route path="/signin" component={SignIn} />
           <Route path="/signup" component={SignUp} />
-          <Route path="/stocks" component={StocksList} />
+          <PrivateRoute path="/stocks" component={Stocks} />
+          <Route path="/account" component={Account} />
         </Router>
       </Provider>
     );
