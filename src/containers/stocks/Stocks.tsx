@@ -1,6 +1,20 @@
 import React, { Component, Fragment } from 'react';
 
-import { Paper, Grid, Typography, List, ListItem, Divider } from '@material-ui/core';
+import {
+  Paper,
+  Grid,
+  Typography,
+  List,
+  ListItem,
+  Divider,
+  InputBase
+} from '@material-ui/core';
+
+import { connect } from 'react-redux';
+
+import { getStocksAction } from '../../actions/stocksActions';
+
+// import SearchIcon from '@material-ui/icons/';
 import StocksList from '../../components/stocksList/StocksList';
 
 import { withStyles, createStyles, Theme, WithStyles } from '@material-ui/core/styles';
@@ -13,12 +27,26 @@ const styles = (theme: Theme) =>
     },
     list: {
       backgroundColor: theme.palette.background.paper
+    },
+    input: {
+      marginLeft: 8,
+      flex: 1
+    },
+    iconButton: {
+      padding: 10
     }
   });
 
-interface IProps extends WithStyles<typeof styles> {}
+interface IProps extends WithStyles<typeof styles> {
+  getStocks?: typeof getStocksAction;
+}
 
 class Stocks extends Component<IProps> {
+  componentDidMount() {
+    const { getStocks } = this.props;
+    getStocks && getStocks({ search: '', count: 6, itemId: 1 });
+  }
+
   render() {
     const { classes } = this.props;
 
@@ -38,4 +66,7 @@ class Stocks extends Component<IProps> {
   }
 }
 
-export default withStyles(styles)(Stocks);
+export default connect(
+  null,
+  { getStocks: getStocksAction }
+)(withStyles(styles)(Stocks));

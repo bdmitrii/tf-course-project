@@ -16,7 +16,7 @@ export function* getAccountInfo(action: { type: string }): any {
   try {
     const data = yield call(() => api.getAccountInfo());
 
-    yield put(setAuthAction());
+    // yield put(setAuthAction());
 
     window.location.replace('/stocks');
   } catch (e) {

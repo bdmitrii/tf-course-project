@@ -23,7 +23,7 @@ if (window.localStorage.getItem('accessToken')) {
   const token = window.localStorage.getItem('accessToken');
   setAuthToken(token);
 
-  store.dispatch(setAuthAction());
+  store.dispatch(setAuthAction({ isAuthed: true }));
 }
 
 class App extends Component {

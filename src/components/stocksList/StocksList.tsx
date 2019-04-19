@@ -1,5 +1,7 @@
 import React, { Component, Fragment } from 'react';
 
+import { connect } from 'react-redux';
+
 import {
   Paper,
   Grid,
@@ -7,85 +9,79 @@ import {
   List,
   ListItem,
   Divider,
-  ListSubheader
+  ListSubheader,
+  Input
 } from '@material-ui/core';
+
+import { IState, IStock } from '../../store';
+
 import StockItem from '../stockItem/StockItem';
 
 import { withStyles, createStyles, Theme, WithStyles } from '@material-ui/core/styles';
-
-const items = {
-  nextItem: 0,
-  prevItem: 0,
-  items: [
-    {
-      id: 0,
-      code: 'TCS',
-      name: 'Alpha',
-      price: 44,
-      priceDelta: 0.3
-    },
-    {
-      id: 1,
-      code: 'TCS',
-      name: 'TCS Group (Tinkoff)',
-      price: 23,
-      priceDelta: 0.25
-    },
-    {
-      id: 2,
-      code: 'TCS',
-      name: 'Sber',
-      price: 56,
-      priceDelta: 0.1
-    }
-  ]
-};
 
 const styles = (theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      padding: theme.spacing.unit
+      padding: theme.spacing.unit,
+      minHeight: theme.spacing.unit * 40
+      // maxHeight: theme.spacing.unit * 80
     },
     list: {
       backgroundColor: theme.palette.background.paper
     },
     listHeading: {
       fontSize: '18px'
+    },
+    input: {
+      padding: '5px',
+      // border: `1px solid #eee`,
+      flex: 1
+    },
+    stocks: {
+      // marginTop: theme.spacing.unit * 2
     }
   });
 
-interface IProps extends WithStyles<typeof styles> {}
+interface IProps extends WithStyles<typeof styles> {
+  stocks?: any;
+}
 
 class StocksList extends Component<IProps> {
   render() {
-    const { classes } = this.props;
+    const { classes, stocks } = this.props;
+
+    console.log(stocks);
 
     return (
       <Paper className={classes.root}>
         <List
           subheader={
             <ListSubheader className={classes.listHeading} component="div">
-              Акции
-              {/* <Typography variant="subheading">Акции</Typography> */}
+              <div>Акции</div>
+              <Input className={classes.input} placeholder="Найти акции..." />
             </ListSubheader>
           }
-        >
-          {items.items.map(item => (
-            <Fragment>
-              <ListItem>
-                <StockItem />
-              </ListItem>
-              <li>
-                <Divider />
-              </li>
-            </Fragment>
-          ))}
-        </List>
-        <Paper />
+        />
+        <div className="stocks">
+          {stocks.items &&
+            stocks.items.map((item: IStock) => (
+              <StockItem
+                key={item.id}
+                name={item.name}
+                price={item.price}
+                priceDelta={item.priceDelta}
+                code={item.code}
+              />
+            ))}
+        </div>
       </Paper>
     );
   }
 }
 
-export default withStyles(styles)(StocksList);
+const mapStateToProps = (state: IState) => ({
+  stocks: state.allStocks
+});
+
+export default connect(mapStateToProps)(withStyles(styles)(StocksList));
