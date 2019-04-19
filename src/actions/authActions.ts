@@ -1,4 +1,10 @@
-import { SIGN_UP, SIGN_IN, SET_AUTH, LOGOUT } from '../constants/actionTypes';
+import {
+  SIGN_UP,
+  SIGN_IN,
+  SET_AUTH,
+  REFRESH_TOKEN,
+  LOGOUT
+} from '../constants/actionTypes';
 
 export interface IUser {
   login?: string;
@@ -7,6 +13,10 @@ export interface IUser {
 
 export interface IAuth {
   isAuthed: boolean;
+}
+
+export interface IRefresh {
+  refreshToken: string;
 }
 
 export function signUpAction(user: IUser) {
@@ -33,5 +43,12 @@ export function setAuthAction(auth: IAuth) {
 export function logoutAction() {
   return {
     type: LOGOUT
+  };
+}
+
+export function refreshToken(token: IRefresh) {
+  return {
+    type: REFRESH_TOKEN,
+    payload: token
   };
 }

@@ -1,6 +1,7 @@
 export const SIGN_UP = 'SIGN_UP';
 export const SIGN_IN = 'SIGN_IN';
 export const SET_AUTH = 'SET_AUTH';
+export const REFRESH_TOKEN = 'REFRESH_TOKEN';
 export const LOGOUT = 'LOGOUT';
 
 export const GET_ACCOUNT_INFO = 'GET_ACCOUNT_INFO';

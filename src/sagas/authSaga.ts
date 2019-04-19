@@ -1,10 +1,11 @@
 import { put, call, takeEvery } from 'redux-saga/effects';
 
-import { IUser } from '../actions/authActions';
+import { IUser, IRefresh } from '../actions/authActions';
 
 import { setAuthAction } from '../actions/authActions';
-import { SIGN_UP, SIGN_IN, LOGOUT } from '../constants/actionTypes';
+import { SIGN_UP, SIGN_IN, REFRESH_TOKEN, LOGOUT } from '../constants/actionTypes';
 
+import { saveTokensToStorage, removeTokensFromStorage } from '../utils/localStorage';
 import setAuthToken from '../utils/setAuthToken';
 import API from '../api';
 
@@ -27,8 +28,7 @@ export function* watchLogout() {
 }
 
 export function* logout() {
-  localStorage.removeItem('accessToken');
-  localStorage.removeItem('refreshToken');
+  removeTokensFromStorage();
 
   setAuthToken(false);
 
@@ -42,8 +42,7 @@ export function* signUpAsync(action: { type: string; payload: IUser }): any {
 
     setAuthToken(accessToken);
 
-    localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('refreshToken', refreshToken);
+    saveTokensToStorage(accessToken, refreshToken);
 
     yield put(setAuthAction({ isAuthed: true }));
 
@@ -60,13 +59,29 @@ export function* signInAsync(action: any): any {
 
     setAuthToken(accessToken);
 
-    localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('refreshToken', refreshToken);
+    saveTokensToStorage(accessToken, refreshToken);
 
     yield put(setAuthAction({ isAuthed: true }));
 
     window.location.replace('/stocks');
   } catch (e) {
     console.error(e);
+  }
+}
+
+export function* watchRefreshToken() {
+  console.log('Dispatched Refresh');
+  yield takeEvery(REFRESH_TOKEN, refreshToken);
+}
+
+export function* refreshToken(action: { type: string; payload: IRefresh }): any {
+  try {
+    const res = yield call(() => api.refreshToken(action.payload));
+    const { accessToken, refreshToken } = res;
+
+    setAuthToken(accessToken);
+    saveTokensToStorage(accessToken, refreshToken);
+  } catch (e) {
+    console.log(e);
   }
 }
