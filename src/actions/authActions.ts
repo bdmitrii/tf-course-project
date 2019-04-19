@@ -1,8 +1,12 @@
-import { SIGN_UP, SIGN_IN, SET_AUTH } from '../constants/actionTypes';
+import { SIGN_UP, SIGN_IN, SET_AUTH, LOGOUT } from '../constants/actionTypes';
 
 export interface IUser {
   login?: string;
   password?: string;
+}
+
+export interface IAuth {
+  isAuthed: boolean;
 }
 
 export function signUpAction(user: IUser) {
@@ -19,8 +23,15 @@ export function signInAction(user: IUser) {
   };
 }
 
-export function setAuthAction() {
+export function setAuthAction(auth: IAuth) {
   return {
-    type: SET_AUTH
+    type: SET_AUTH,
+    payload: auth
+  };
+}
+
+export function logoutAction() {
+  return {
+    type: LOGOUT
   };
 }

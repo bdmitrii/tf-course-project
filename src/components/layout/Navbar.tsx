@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import AppBar from '@material-ui/core/AppBar';
 import ToolBar from '@material-ui/core/Toolbar';
@@ -10,6 +10,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { withStyles, createStyles, Theme, WithStyles } from '@material-ui/core/styles';
 
 import { connect } from 'react-redux';
+import { logoutAction } from '../../actions/authActions';
 
 import { IState } from '../../store';
 
@@ -43,16 +44,46 @@ export interface Props extends WithStyles<typeof styles> {
   auth?: {
     isAuthed: boolean;
   };
+  logout?: typeof logoutAction;
 }
 
 const Navbar: React.FunctionComponent<Props> = (props: Props) => {
-  const { classes, auth } = props;
+  const { classes, auth, logout } = props;
 
-  // const handleLogoutClick = () => {
-  //   if (isAuthed) {
+  const handleLogoutClick = () => {
+    logout && logout();
+  };
 
-  //   }
-  // }
+  const loginButton = (
+    <Button
+      variant="outlined"
+      color="secondary"
+      className={classes.navListItem}
+      component={(props: any) => (
+        <RouterLink {...props} to="/signin">
+          {props.children}
+        </RouterLink>
+      )}
+    >
+      Войти
+    </Button>
+  );
+
+  const logoutButton = (
+    <Button
+      variant="outlined"
+      color="secondary"
+      className={classes.navListItem}
+      component={(props: any) => (
+        <RouterLink {...props} to="/signin">
+          {props.children}
+        </RouterLink>
+      )}
+      onClick={handleLogoutClick}
+    >
+      Выйти
+    </Button>
+  );
 
   return (
     <div className={classes.root}>
@@ -93,18 +124,7 @@ const Navbar: React.FunctionComponent<Props> = (props: Props) => {
             </Button>
           )}
 
-          <Button
-            variant="outlined"
-            color="secondary"
-            className={classes.navListItem}
-            component={(props: any) => (
-              <RouterLink {...props} to="/signin">
-                {props.children}
-              </RouterLink>
-            )}
-          >
-            {auth && auth.isAuthed ? 'Выйти' : 'Войти'}
-          </Button>
+          {auth && auth.isAuthed ? logoutButton : loginButton}
         </ToolBar>
       </AppBar>
     </div>
@@ -115,4 +135,7 @@ const mapStateToProps = (state: IState) => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps)(withStyles(styles)(Navbar));
+export default connect(
+  mapStateToProps,
+  { logout: logoutAction }
+)(withStyles(styles)(Navbar));

@@ -70,7 +70,6 @@ class SignIn extends Component<IProps, Partial<IState>> {
   }
 
   handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('change');
     this.setState({ [e.currentTarget.name]: e.currentTarget.value });
   };
 
@@ -78,7 +77,6 @@ class SignIn extends Component<IProps, Partial<IState>> {
     e.preventDefault();
 
     const { signIn } = this.props;
-    console.log(signIn);
 
     const user = {
       login: this.state.login,
@@ -86,7 +84,7 @@ class SignIn extends Component<IProps, Partial<IState>> {
     };
 
     if (signIn) {
-      console.log(signIn(user));
+      signIn(user);
     }
   };
 

@@ -9,7 +9,7 @@ export const authReducer = (state = initState, action: any) => {
     case SET_AUTH:
       return {
         ...state,
-        isAuthed: true
+        isAuthed: action.payload.isAuthed
       };
 
     default:

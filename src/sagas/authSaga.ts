@@ -3,7 +3,7 @@ import { put, call, takeEvery } from 'redux-saga/effects';
 import { IUser } from '../actions/authActions';
 
 import { setAuthAction } from '../actions/authActions';
-import { SIGN_UP, SIGN_IN } from '../constants/actionTypes';
+import { SIGN_UP, SIGN_IN, LOGOUT } from '../constants/actionTypes';
 
 import setAuthToken from '../utils/setAuthToken';
 import API from '../api';
@@ -20,6 +20,21 @@ export function* watchSignIn() {
   yield takeEvery(SIGN_IN, signInAsync);
 }
 
+export function* watchLogout() {
+  console.log('Logout');
+
+  yield takeEvery(LOGOUT, logout);
+}
+
+export function* logout() {
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
+
+  setAuthToken(false);
+
+  yield put(setAuthAction({ isAuthed: false }));
+}
+
 export function* signUpAsync(action: { type: string; payload: IUser }): any {
   try {
     const res = yield call(() => api.signUp(action.payload));
@@ -30,7 +45,7 @@ export function* signUpAsync(action: { type: string; payload: IUser }): any {
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
 
-    yield put(setAuthAction());
+    yield put(setAuthAction({ isAuthed: true }));
 
     window.location.replace('/stocks');
   } catch (e) {
@@ -48,7 +63,7 @@ export function* signInAsync(action: any): any {
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
 
-    yield put(setAuthAction());
+    yield put(setAuthAction({ isAuthed: true }));
 
     window.location.replace('/stocks');
   } catch (e) {
