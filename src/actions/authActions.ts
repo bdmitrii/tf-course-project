@@ -6,34 +6,23 @@ import {
   LOGOUT
 } from '../constants/actionTypes';
 
-export interface IUser {
-  login?: string;
-  password?: string;
-}
+import { IUserAuth, IRefresh, IAuthenticated } from '../constants/interfaces';
 
-export interface IAuth {
-  isAuthed: boolean;
-}
-
-export interface IRefresh {
-  refreshToken: string;
-}
-
-export function signUpAction(user: IUser) {
+export function signUpAction(user: IUserAuth) {
   return {
     type: SIGN_UP,
     payload: user
   };
 }
 
-export function signInAction(user: IUser) {
+export function signInAction(user: IUserAuth) {
   return {
     type: SIGN_IN,
     payload: user
   };
 }
 
-export function setAuthAction(auth: IAuth) {
+export function setAuthAction(auth: IAuthenticated) {
   return {
     type: SET_AUTH,
     payload: auth

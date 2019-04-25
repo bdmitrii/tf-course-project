@@ -12,7 +12,7 @@ import { withStyles, createStyles, Theme, WithStyles } from '@material-ui/core/s
 import { connect } from 'react-redux';
 import { logoutAction } from '../../actions/authActions';
 
-import { IState } from '../../store';
+import { IState, IAuthenticated } from '../../constants/interfaces';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -41,17 +41,15 @@ const styles = (theme: Theme) =>
   });
 
 export interface Props extends WithStyles<typeof styles> {
-  auth?: {
-    isAuthed: boolean;
-  };
-  logout?: typeof logoutAction;
+  auth: IAuthenticated;
+  logout: typeof logoutAction;
 }
 
 const Navbar: React.FunctionComponent<Props> = (props: Props) => {
   const { classes, auth, logout } = props;
 
   const handleLogoutClick = () => {
-    logout && logout();
+    logout();
   };
 
   const loginButton = (
@@ -91,13 +89,13 @@ const Navbar: React.FunctionComponent<Props> = (props: Props) => {
         <ToolBar>
           <Link component={(props: any) => <RouterLink {...props} to="/" />}>
             <Typography variant="h5" className={classes.logo} noWrap>
-              Darya Invest
+              Oleg Invest
             </Typography>
           </Link>
 
           <div className={classes.grow} />
 
-          {auth && auth.isAuthed && (
+          {auth.isAuthenticated && (
             <Button
               color="secondary"
               className={classes.navListItem}
@@ -110,7 +108,7 @@ const Navbar: React.FunctionComponent<Props> = (props: Props) => {
               Акции
             </Button>
           )}
-          {auth && auth.isAuthed && (
+          {auth.isAuthenticated && (
             <Button
               color="secondary"
               className={classes.navListItem}
@@ -124,7 +122,7 @@ const Navbar: React.FunctionComponent<Props> = (props: Props) => {
             </Button>
           )}
 
-          {auth && auth.isAuthed ? logoutButton : loginButton}
+          {auth.isAuthenticated ? logoutButton : loginButton}
         </ToolBar>
       </AppBar>
     </div>

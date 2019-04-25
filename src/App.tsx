@@ -23,7 +23,7 @@ if (window.localStorage.getItem('accessToken')) {
   const token = window.localStorage.getItem('accessToken');
   setAuthToken(token);
 
-  store.dispatch(setAuthAction({ isAuthed: true }));
+  store.dispatch(setAuthAction({ isAuthenticated: true }));
 }
 
 class App extends Component {
@@ -35,7 +35,7 @@ class App extends Component {
           <Navbar />
           <Route path="/signin" component={SignIn} />
           <Route path="/signup" component={SignUp} />
-          <PrivateRoute path="/stocks" component={Stocks} />
+          <Route path="/stocks" component={Stocks} />
           <Route path="/account" component={Account} />
         </Router>
       </Provider>

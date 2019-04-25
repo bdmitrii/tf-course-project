@@ -1,8 +1,9 @@
 import { put, call, takeEvery } from 'redux-saga/effects';
 
-import { IUser, IRefresh } from '../actions/authActions';
+import { IUserAuth, IRefresh } from '../constants/interfaces';
 
 import { setAuthAction } from '../actions/authActions';
+import { setErrorAction } from '../actions/errorActions';
 import { SIGN_UP, SIGN_IN, REFRESH_TOKEN, LOGOUT } from '../constants/actionTypes';
 
 import { saveTokensToStorage, removeTokensFromStorage } from '../utils/localStorage';
@@ -13,17 +14,13 @@ const { api } = API;
 
 export function* watchSignUp() {
   yield takeEvery(SIGN_UP, signUpAsync);
-  console.log('Dispatched signup');
 }
 
 export function* watchSignIn() {
-  console.log('Dispatched SignIn');
   yield takeEvery(SIGN_IN, signInAsync);
 }
 
 export function* watchLogout() {
-  console.log('Logout');
-
   yield takeEvery(LOGOUT, logout);
 }
 
@@ -32,21 +29,22 @@ export function* logout() {
 
   setAuthToken(false);
 
-  yield put(setAuthAction({ isAuthed: false }));
+  yield put(setAuthAction({ isAuthenticated: false }));
 }
 
-export function* signUpAsync(action: { type: string; payload: IUser }): any {
+export function* signUpAsync(action: { type: string; payload: IUserAuth }): any {
   try {
     const res = yield call(() => api.signUp(action.payload));
-    const { accessToken, refreshToken } = res;
+
+    const { accessToken, refreshToken } = res.data;
 
     setAuthToken(accessToken);
 
     saveTokensToStorage(accessToken, refreshToken);
 
-    yield put(setAuthAction({ isAuthed: true }));
+    yield put(setAuthAction({ isAuthenticated: true }));
 
-    window.location.replace('/stocks');
+    // window.location.replace('/stocks');
   } catch (e) {
     console.error(e);
   }
@@ -55,22 +53,23 @@ export function* signUpAsync(action: { type: string; payload: IUser }): any {
 export function* signInAsync(action: any): any {
   try {
     const res = yield call(() => api.signIn(action.payload));
-    const { accessToken, refreshToken } = res;
+    const { accessToken, refreshToken } = res.data;
 
     setAuthToken(accessToken);
-
     saveTokensToStorage(accessToken, refreshToken);
 
-    yield put(setAuthAction({ isAuthed: true }));
+    yield put(setAuthAction({ isAuthenticated: true }));
 
     window.location.replace('/stocks');
+    console.log(res);
   } catch (e) {
-    console.error(e);
+    const { message } = e.response.data;
+
+    yield put(setErrorAction(message));
   }
 }
 
 export function* watchRefreshToken() {
-  console.log('Dispatched Refresh');
   yield takeEvery(REFRESH_TOKEN, refreshToken);
 }
 

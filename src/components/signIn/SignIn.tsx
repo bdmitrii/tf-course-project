@@ -6,60 +6,27 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { withStyles, createStyles, Theme, WithStyles } from '@material-ui/core/styles';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
 
 import { connect } from 'react-redux';
 
 import { Link as RouterLink } from 'react-router-dom';
 import { signInAction } from '../../actions/authActions';
+import { clearErrorAction } from '../../actions/errorActions';
+import { IUserAuth } from '../../constants/interfaces';
 
-const styles = (theme: Theme) =>
-  createStyles({
-    main: {
-      width: 'auto',
-      display: 'block', // Fix IE 11 issue.
-      marginLeft: theme.spacing.unit * 3,
-      marginRight: theme.spacing.unit * 3,
-      [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-        width: 400,
-        marginLeft: 'auto',
-        marginRight: 'auto'
-      }
-    },
-    paper: {
-      marginTop: theme.spacing.unit * 15,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing
-        .unit * 3}px`
-    },
-    avatar: {
-      margin: theme.spacing.unit,
-      backgroundColor: theme.palette.secondary.main
-    },
-    form: {
-      width: '100%', // Fix IE 11 issue.
-      marginTop: theme.spacing.unit
-    },
-    submit: {
-      marginTop: theme.spacing.unit * 3
-    },
-    register: {
-      marginTop: theme.spacing.unit * 2
-    }
-  });
+import { IState as IReduxState } from '../../constants/interfaces';
+import styles from '../../styles/form';
 
 interface IProps extends WithStyles<typeof styles> {
-  signIn?: typeof signInAction;
+  signIn: typeof signInAction;
+  clearError: typeof clearErrorAction;
+  error: string;
 }
 
-interface IState {
-  login: string;
-  password: string;
-}
+interface IState extends IUserAuth {}
 
-class SignIn extends Component<IProps, Partial<IState>> {
+class SignIn extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
@@ -70,7 +37,10 @@ class SignIn extends Component<IProps, Partial<IState>> {
   }
 
   handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ [e.currentTarget.name]: e.currentTarget.value });
+    this.setState({ [e.currentTarget.name]: e.currentTarget.value } as Pick<
+      IState,
+      keyof IState
+    >);
   };
 
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -78,7 +48,7 @@ class SignIn extends Component<IProps, Partial<IState>> {
 
     const { signIn } = this.props;
 
-    const user = {
+    const user: IUserAuth = {
       login: this.state.login,
       password: this.state.password
     };
@@ -88,8 +58,14 @@ class SignIn extends Component<IProps, Partial<IState>> {
     }
   };
 
+  componentWillUnmount() {
+    const { clearError } = this.props;
+
+    clearError();
+  }
+
   render() {
-    const { classes } = this.props;
+    const { classes, error } = this.props;
 
     return (
       <main className={classes.main}>
@@ -119,6 +95,7 @@ class SignIn extends Component<IProps, Partial<IState>> {
                 onChange={this.handleChange}
               />
             </FormControl>
+            {error && <Typography color="error">{error}</Typography>}
             <Button
               type="submit"
               fullWidth
@@ -149,7 +126,13 @@ class SignIn extends Component<IProps, Partial<IState>> {
   }
 }
 
+const mapStateToProps = (state: IReduxState) => {
+  return {
+    error: state.error
+  };
+};
+
 export default connect(
-  null,
-  { signIn: signInAction }
+  mapStateToProps,
+  { signIn: signInAction, clearError: clearErrorAction }
 )(withStyles(styles)(SignIn));

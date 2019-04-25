@@ -1,15 +1,19 @@
 import { SET_AUTH } from '../constants/actionTypes';
+import { IAuthenticated } from '../constants/interfaces';
 
 const initState = {
-  isAuthed: false
+  isAuthenticated: false
 };
 
-export const authReducer = (state = initState, action: any) => {
+export const authReducer = (
+  state = initState,
+  action: { type: string; payload: IAuthenticated }
+) => {
   switch (action.type) {
     case SET_AUTH:
       return {
         ...state,
-        isAuthed: action.payload.isAuthed
+        ...action.payload
       };
 
     default:
