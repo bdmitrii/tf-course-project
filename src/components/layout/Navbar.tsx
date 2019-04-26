@@ -108,19 +108,6 @@ const Navbar: React.FunctionComponent<Props> = (props: Props) => {
               Акции
             </Button>
           )}
-          {auth.isAuthenticated && (
-            <Button
-              color="secondary"
-              className={classes.navListItem}
-              component={(props: any) => (
-                <RouterLink {...props} to="/account">
-                  {props.children}
-                </RouterLink>
-              )}
-            >
-              Мой портфель
-            </Button>
-          )}
 
           {auth.isAuthenticated ? logoutButton : loginButton}
         </ToolBar>

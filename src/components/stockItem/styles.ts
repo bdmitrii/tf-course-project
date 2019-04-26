@@ -37,5 +37,12 @@ export default (theme: Theme) =>
       borderRadius: '50%',
       backgroundColor: theme.palette.grey[500],
       marginRight: theme.spacing.unit * 2
+    },
+    line: {
+      fill: 'none',
+      stroke: 'steelblue',
+      strokeWidth: '1.5px',
+      strokeLinejoin: 'round',
+      strokeLinecap: 'round'
     }
   });

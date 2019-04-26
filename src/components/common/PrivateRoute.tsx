@@ -1,15 +1,12 @@
 import React, { FunctionComponent } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 
-import { IState } from '../../store';
+import { IState, IAuthenticated } from '../../constants/interfaces';
 
 interface IProps {
   component: FunctionComponent | typeof React.Component;
-  auth?: {
-    isAuthed: boolean;
-  };
+  auth: IAuthenticated;
   path: string;
 }
 
@@ -17,11 +14,7 @@ const PrivateRoute = ({ component: Component, auth, path }: IProps) => (
   <Route
     path={path}
     render={props =>
-      (auth && auth.isAuthed) === true ? (
-        <Component {...props} />
-      ) : (
-        <Redirect to="/login" />
-      )
+      auth.isAuthenticated === true ? <Component {...props} /> : <Redirect to="/login" />
     }
   />
 );

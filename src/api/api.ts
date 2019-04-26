@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
-import { IRefresh } from '../actions/authActions';
+import { IRefresh } from '../constants/interfaces';
 
 interface IUser {
   login?: string;
@@ -23,33 +23,32 @@ export default class Api {
 
   constructor() {
     this.http = axios.create({
-      baseURL: back3,
+      baseURL: back1,
       headers: { 'Content-Type': 'application/json' }
     });
-    // this.http = axios.create({ baseURL: mocksURL });
   }
 
   signUp(user: IUser) {
-    return this.http.post('/auth/signup', user, {}).then(({ data }) => data);
+    return this.http.post('/auth/signup', user, {});
   }
 
   signIn(user: IUser) {
-    return this.http.post('/auth/signin', user).then(({ data }) => data);
+    return this.http.post('/auth/signin', user);
   }
 
   refreshToken(token: IRefresh) {
-    return this.http.post('/auth/refresh', token).then(({ data }) => data);
+    return this.http.post('/auth/refresh', token);
   }
 
   getAccountInfo() {
-    return this.http.get('/account/info').then(({ data }) => data);
+    return this.http.get('/account/info');
   }
 
   getStocks(stocksListInfo: IStocksListInfo) {
-    return this.http.get(
-      `/stocks?search=${stocksListInfo.search}&count=${stocksListInfo.count}&itemId=${
-        stocksListInfo.itemId
-      }`
-    );
+    return this.http.get(`/stocks`);
+  }
+
+  getStockHistory(id: number) {
+    return this.http.get(`/stocks/${id}/history`);
   }
 }

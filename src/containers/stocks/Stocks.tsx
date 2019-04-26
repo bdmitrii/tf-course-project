@@ -43,6 +43,7 @@ interface IProps extends WithStyles<typeof styles> {
 
 class Stocks extends Component<IProps> {
   componentDidMount() {
+    // debugger;
     const { getStocks } = this.props;
     getStocks && getStocks({ search: '', count: 6, itemId: 1 });
   }
@@ -53,7 +54,7 @@ class Stocks extends Component<IProps> {
     return (
       <div className={classes.root}>
         <Grid container>
-          <Grid item md={6} sm={6} xs={12}>
+          <Grid item md={6} sm={12} xs={12}>
             <StocksList />
           </Grid>
           <Grid item container md={6} direction="row">
