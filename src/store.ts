@@ -5,26 +5,6 @@ import rootSaga from './sagas';
 
 import rootReducer from './reducers';
 
-export interface IStock {
-  id: number;
-  code: string;
-  name: string;
-  iconUrl: string;
-  price: number;
-  priceDelta: number;
-}
-
-export interface IState {
-  auth?: {
-    isAuthed: boolean;
-  };
-  allStocks?: {
-    nextItemId: number;
-    prevNumberId: number;
-    items: Array<IStock>;
-  };
-}
-
 declare global {
   interface Window {
     __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
