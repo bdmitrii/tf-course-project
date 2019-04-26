@@ -13,7 +13,7 @@ import {
   Input
 } from '@material-ui/core';
 
-import { IState, IStock } from '../../store';
+import { IState, IStock, IStocks } from '../../constants/interfaces';
 
 import StockItem from '../stockItem/StockItem';
 
@@ -44,7 +44,7 @@ const styles = (theme: Theme) =>
   });
 
 interface IProps extends WithStyles<typeof styles> {
-  stocks?: any;
+  stocks: IStocks;
 }
 
 class StocksList extends Component<IProps> {
@@ -54,28 +54,30 @@ class StocksList extends Component<IProps> {
     console.log(stocks);
 
     return (
-      <Paper className={classes.root}>
-        <List
+      <div className={classes.root}>
+        {/* <List
           subheader={
             <ListSubheader className={classes.listHeading} component="div">
               <div>Акции</div>
               <Input className={classes.input} placeholder="Найти акции..." />
             </ListSubheader>
           }
-        />
+        /> */}
         <div className="stocks">
           {stocks.items &&
             stocks.items.map((item: IStock) => (
               <StockItem
+                id={item.id}
                 key={item.id}
                 name={item.name}
                 price={item.price}
                 priceDelta={item.priceDelta}
                 code={item.code}
+                iconUrl={item.iconUrl}
               />
             ))}
         </div>
-      </Paper>
+      </div>
     );
   }
 }
