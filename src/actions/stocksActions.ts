@@ -1,44 +1,16 @@
 import {
   GET_STOCKS,
-  GET_STOCK,
+  GET_STOCK_HISTORY,
   GET_STOCKS_SUCCEEDED,
-  GET_STOCK_SUCCEEDED
+  GET_STOCK_HISTORY_SUCCEEDED
 } from '../constants/actionTypes';
 
-export interface IStock {
-  id: number;
-  code: string;
-  name: string;
-  iconUrl: string;
-  price: number;
-  deltaPrice: number;
-}
-
-export interface IHistory {
-  date: string;
-  price: number;
-}
-
-export interface IStockHistory extends IStock {
-  history: Array<IHistory>;
-}
-
-export interface IStocksQuery {
-  search?: string;
-  count?: number;
-  itemId?: number;
-}
-
-export interface IStockQuery {
-  id: number;
-  range?: string;
-}
-
-export interface IStocks {
-  nextItemsId: number;
-  prevItemId: number;
-  items: Array<IStock>;
-}
+import {
+  IStocksQuery,
+  IStocks,
+  IStockHistoryQuery,
+  IStockHistory
+} from '../constants/interfaces';
 
 export function getStocksAction(query: IStocksQuery) {
   return {
@@ -54,16 +26,16 @@ export function getStocksSucceededAction(stocks: IStocks) {
   };
 }
 
-export function getStockAction(query: IStockQuery) {
+export function getStockHistoryAction(query: IStockHistoryQuery) {
   return {
-    type: GET_STOCK,
+    type: GET_STOCK_HISTORY,
     payload: query
   };
 }
 
-export function getStockSucceededAction(stock: IStockHistory) {
+export function getStockHistorySucceededAction(stock: IStockHistory) {
   return {
-    type: GET_STOCK_SUCCEEDED,
+    type: GET_STOCK_HISTORY_SUCCEEDED,
     payload: stock
   };
 }

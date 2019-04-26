@@ -16,6 +16,7 @@ export interface IState {
   auth: IAuthenticated;
   allStocks: IStocks;
   error: string;
+  histories: Array<IStockHistory>;
 }
 
 export interface IRefresh {
@@ -31,8 +32,16 @@ export interface IHistory {
   price: number;
 }
 
-export interface IStockHistory extends IStock {
+export interface IStockHistory {
   history: Array<IHistory>;
+  from: string;
+  to: string;
+  stockId: number;
+  code: string;
+  name: string;
+  iconUrl: string;
+  price: number;
+  priceDelta: number;
 }
 
 export interface IStocksQuery {

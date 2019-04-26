@@ -1,4 +1,5 @@
-import { SET_AUTH, GET_STOCKS_SUCCEEDED } from '../constants/actionTypes';
+import { GET_STOCKS_SUCCEEDED } from '../constants/actionTypes';
+import { IStockHistory } from '../constants/interfaces';
 
 const initState = {
   nextItemId: null,
