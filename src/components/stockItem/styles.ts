@@ -44,5 +44,11 @@ export default (theme: Theme) =>
       strokeWidth: '1.5px',
       strokeLinejoin: 'round',
       strokeLinecap: 'round'
+    },
+    countInput: {
+      width: 40,
+      backgroundColor: theme.palette.grey[100],
+      padding: '0 5px',
+      borderRadius: 4
     }
   });

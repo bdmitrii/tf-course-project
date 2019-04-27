@@ -1,20 +1,22 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
 
 import { IStockHistory, IHistory } from '../../constants/interfaces';
 
-interface IProps {
+import styles from './styles';
+
+interface IProps extends WithStyles<typeof styles> {
   data: IStockHistory;
 }
 
 class Chart extends Component<IProps> {
-  componentDidUpdate() {
-    console.log('ComponentDidUpdate');
-    if (!this.props.data) return;
+  componentDidMount() {
+    // if (!this.props.data) return;
 
     console.log(this.props);
-    const { data } = this.props;
-    const { from, to, history } = data;
+    const { data, classes } = this.props;
+    const { from, to, history, stockId } = data;
 
     const prices: Array<number> = history.map(h => h.price) as Array<number>;
 
@@ -22,23 +24,23 @@ class Chart extends Component<IProps> {
     const width = 500;
     const height = 400;
 
+    d3.select('.chart')
+      .selectAll('*')
+      .remove();
+
     const svg = d3
-      .select('.chart')
+      .selectAll(`svg[data-id="${stockId}"]`)
       .attr('width', '100%')
       .attr('height', `${height + margin.bottom + margin.top}`)
       .append('g')
       .attr('transform', `translate(${margin.left}, 0)`);
 
-    console.log(width, height);
-
     const parseHistoryDate = d3.utcParse('%Y-%m-%dT%H:%M:%S');
     const parseDate = d3.utcParse('%Y-%m-%dT%H:%M:%S.%L');
-    const formatDate = d3.timeFormat('%Y-%m-%d');
+    const formatDate = d3.timeFormat('%Y-%m-%d %H:%M:%S');
 
     const fromDate = new Date(formatDate(parseDate(from) as Date));
     const toDate = new Date(formatDate(parseDate(to) as Date));
-
-    console.log(formatDate(parseDate(from) as Date), from.slice(0, -3));
 
     const xScale = d3
       .scaleTime()
@@ -52,7 +54,7 @@ class Chart extends Component<IProps> {
     const line = d3
       .line()
       .x((d: any) => {
-        console.log(new Date(formatDate(parseHistoryDate(d.data) as Date)));
+        // console.log(new Date(formatDate(parseHistoryDate(d.data) as Date)), d.data);
         return xScale(new Date(formatDate(parseHistoryDate(d.data) as Date)));
       })
       .y((d: any) => yScale(d.price));
@@ -67,13 +69,15 @@ class Chart extends Component<IProps> {
     svg
       .append('path')
       .datum(data.history)
-      .attr('class', 'line')
+      .attr('class', classes.line)
       .attr('d', line as any);
   }
 
   render() {
-    return <svg className="chart" width="100%" height="300" />;
+    let stockId = null;
+    if (this.props.data) stockId = this.props.data.stockId;
+    return <svg data-id={stockId} />;
   }
 }
 
-export default Chart;
+export default withStyles(styles)(Chart);

@@ -16,18 +16,24 @@ import {
 } from '@material-ui/core';
 
 import Chart from './Chart';
+import StockControls from './StockControls';
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 import classnames from 'classnames';
 
-import { IStock, IState as IReduxState, IStockHistory } from '../../constants/interfaces';
+import {
+  IStock,
+  IState as IReduxState,
+  IStockHistory,
+  IAccountStock
+} from '../../constants/interfaces';
 import { getStockHistoryAction } from '../../actions/stocksActions';
 
 import styles from './styles';
 
-interface IProps extends WithStyles<typeof styles>, IStock {
+interface IProps extends WithStyles<typeof styles>, IAccountStock {
   getStockHistory: typeof getStockHistoryAction;
   histories: Array<IStockHistory>;
 }
@@ -58,7 +64,17 @@ class StockItem extends Component<IProps, IState> {
   };
 
   render() {
-    const { classes, name, price, priceDelta, code, iconUrl, histories, id } = this.props;
+    const {
+      classes,
+      name,
+      price,
+      priceDelta,
+      code,
+      iconUrl,
+      histories,
+      id,
+      count
+    } = this.props;
 
     const stockHistory: IStockHistory = histories.find(
       h => h.stockId === id
@@ -103,11 +119,11 @@ class StockItem extends Component<IProps, IState> {
         </ExpansionPanelSummary>
 
         <ExpansionPanelDetails>
-          <Chart data={stockHistory} />
+          {!stockHistory ? 'Loading...' : <Chart data={stockHistory} />}
         </ExpansionPanelDetails>
         <Divider />
         <ExpansionPanelActions>
-          <Button>Купить</Button>
+          <StockControls />
         </ExpansionPanelActions>
       </ExpansionPanel>
     );

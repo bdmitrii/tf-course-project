@@ -2,7 +2,7 @@ import { put, call, takeEvery } from 'redux-saga/effects';
 
 import { IUserAuth, IRefresh } from '../constants/interfaces';
 
-import { setAuthAction } from '../actions/authActions';
+import { setAuthAction, logoutAction } from '../actions/authActions';
 import { setErrorAction } from '../actions/errorActions';
 import { SIGN_UP, SIGN_IN, REFRESH_TOKEN, LOGOUT } from '../constants/actionTypes';
 
@@ -25,11 +25,13 @@ export function* watchLogout() {
 }
 
 export function* logout() {
+  console.log('logout');
   removeTokensFromStorage();
 
   setAuthToken(false);
 
   yield put(setAuthAction({ isAuthenticated: false }));
+  // window.location.replace('/signin');
 }
 
 export function* signUpAsync(action: { type: string; payload: IUserAuth }): any {
@@ -76,11 +78,11 @@ export function* watchRefreshToken() {
 export function* refreshToken(action: { type: string; payload: IRefresh }): any {
   try {
     const res = yield call(() => api.refreshToken(action.payload));
-    const { accessToken, refreshToken } = res;
+    const { accessToken, refreshToken } = res.data;
 
     setAuthToken(accessToken);
     saveTokensToStorage(accessToken, refreshToken);
   } catch (e) {
-    console.log(e);
+    yield put(logoutAction());
   }
 }

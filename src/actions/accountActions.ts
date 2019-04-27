@@ -1,10 +1,5 @@
-import { GET_ACCOUNT_INFO } from '../constants/actionTypes';
-
-export interface IAccountInfo {
-  name: string;
-  balance: number;
-  // stocks:
-}
+import { GET_ACCOUNT_INFO, GET_ACCOUNT_INFO_SUCCEEDED } from '../constants/actionTypes';
+import { IAccountInfo } from '../constants/interfaces';
 
 export function getAccountInfoAction() {
   return {
@@ -12,4 +7,9 @@ export function getAccountInfoAction() {
   };
 }
 
-export function getAccountInfoSucceededAction() {}
+export function getAccountInfoSucceededAction(payload: IAccountInfo) {
+  return {
+    type: GET_ACCOUNT_INFO_SUCCEEDED,
+    payload
+  };
+}

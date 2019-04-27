@@ -3,6 +3,15 @@ export interface IUserAuth {
   password: string;
 }
 
+export interface IStockBase {
+  id: number;
+  code: string;
+  name: string;
+  iconUrl: string;
+  price: number;
+  priceDelta: number;
+}
+
 export interface IStock {
   id: number;
   code: string;
@@ -17,6 +26,7 @@ export interface IState {
   allStocks: IStocks;
   error: string;
   histories: Array<IStockHistory>;
+  account: IAccountInfo;
 }
 
 export interface IRefresh {
@@ -42,6 +52,16 @@ export interface IStockHistory {
   iconUrl: string;
   price: number;
   priceDelta: number;
+}
+
+export interface IAccountStock extends IStock {
+  count: number;
+}
+
+export interface IAccountInfo {
+  name: string;
+  balance: number;
+  stocks: Array<IAccountStock>;
 }
 
 export interface IStocksQuery {
