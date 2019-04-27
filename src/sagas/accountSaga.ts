@@ -1,10 +1,11 @@
 import { put, call, takeEvery } from 'redux-saga/effects';
 
-import { setAuthAction } from '../actions/authActions';
-import { GET_ACCOUNT_INFO, GET_ACCOUNT_INFO_SUCCEEDED } from '../constants/actionTypes';
+import { setAuthAction, refreshToken } from '../actions/authActions';
+import { GET_ACCOUNT_INFO } from '../constants/actionTypes';
 
-import setAuthToken from '../utils/setAuthToken';
 import API from '../api';
+import { getAccountInfoSucceededAction } from '../actions/accountActions';
+import { getRefreshToken } from '../utils/localStorage';
 
 const { api } = API;
 
@@ -14,11 +15,12 @@ export function* watchGetAccountInfo() {
 
 export function* getAccountInfo(action: { type: string }): any {
   try {
-    const data = yield call(() => api.getAccountInfo());
+    yield put(refreshToken({ refreshToken: getRefreshToken() }));
+    const res = yield call(() => api.getAccountInfo());
 
-    // yield put(setAuthAction());
+    const { data } = res;
 
-    window.location.replace('/stocks');
+    yield put(getAccountInfoSucceededAction(data));
   } catch (e) {
     console.error(e);
   }
