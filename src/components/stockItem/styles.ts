@@ -31,6 +31,9 @@ export default (theme: Theme) =>
       fontSize: '12px',
       color: theme.palette.grey[500]
     },
+    count: {
+      marginLeft: 10
+    },
     stockIcon: {
       width: '40px',
       height: '40px',

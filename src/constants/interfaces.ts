@@ -27,10 +27,7 @@ export interface IState {
   error: string;
   histories: Array<IStockHistory>;
   account: IAccountInfo;
-  transactions: {
-    loading: boolean;
-    items: ITransactions;
-  };
+  transactions: IStateTransactions;
 }
 
 export interface IRefresh {
@@ -110,4 +107,9 @@ export interface ITransactions {
   nextItemId: number;
   prevItemId: number;
   items: ITransaction[];
+}
+
+export interface IStateTransactions {
+  loading: boolean;
+  history: ITransactions;
 }

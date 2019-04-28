@@ -13,6 +13,8 @@ import {
   Input
 } from '@material-ui/core';
 
+import Stub from '../../components/common/stub/Stub';
+
 import {
   IState,
   IStock,
@@ -21,7 +23,7 @@ import {
   IStockBase
 } from '../../constants/interfaces';
 
-import StockItem from '../stockItem/StockItem';
+import Stock from '../../containers/stock/Stock';
 
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 
@@ -39,20 +41,22 @@ class StocksList extends Component<IProps> {
     return (
       <div className={classes.root}>
         <div className="stocks">
-          {stocks.length
-            ? (stocks as Array<IAccountStock | IStock>).map(item => (
-                <StockItem
-                  id={item.id}
-                  key={item.id}
-                  name={item.name}
-                  price={item.price}
-                  priceDelta={item.priceDelta}
-                  code={item.code}
-                  iconUrl={item.iconUrl}
-                  count={(item as IAccountStock).count}
-                />
-              ))
-            : 'Нет акций'}
+          {stocks.length ? (
+            (stocks as Array<IAccountStock | IStock>).map(item => (
+              <Stock
+                id={item.id}
+                key={item.id}
+                name={item.name}
+                price={item.price}
+                priceDelta={item.priceDelta}
+                code={item.code}
+                iconUrl={item.iconUrl}
+                count={(item as IAccountStock).count}
+              />
+            ))
+          ) : (
+            <Stub />
+          )}
         </div>
       </div>
     );

@@ -10,6 +10,7 @@ import { IState as IReduxState, IAccountInfo } from '../../constants/interfaces'
 import { getAccountInfoAction } from '../../actions/accountActions';
 import StocksList from '../../components/stocksList/StocksList';
 import AccountStocksList from '../accountStocksList/AccountStocksList';
+import Stub from '../../components/common/stub/Stub';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -33,13 +34,18 @@ class Account extends Component<IProps> {
     getAccountInfo();
   }
 
+  componentDidUpdate() {
+    // const { getAccountInfo } = this.props;
+    // getAccountInfo();
+  }
+
   render() {
     const { classes, account } = this.props;
 
     return (
       <div>
         {!account ? (
-          'Loading'
+          <Stub />
         ) : (
           <AccountHeader name={account.name} balance={account.balance} />
         )}

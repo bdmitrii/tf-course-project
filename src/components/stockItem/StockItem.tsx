@@ -12,11 +12,11 @@ import {
   ExpansionPanelDetails,
   Divider,
   Tabs,
-  Tab
+  Tab,
+  Chip
 } from '@material-ui/core';
 
 import Chart from './Chart';
-import StockControls from './StockControls';
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
@@ -30,8 +30,15 @@ import {
   IAccountStock
 } from '../../constants/interfaces';
 import { getStockHistoryAction } from '../../actions/stocksActions';
+import { buyStocksAction, sellStocksAction } from '../../actions/transactionActions';
 
 import styles from './styles';
+import Stub from '../common/stub/Stub';
+// import StockControls from './StockControls';
+
+import BuyButton from '../stockControls/buyButton/BuyButton';
+import withStockControls from '../stockControls/withStockControls';
+import SellButton from '../stockControls/sellButton/SellButton';
 
 interface IProps extends WithStyles<typeof styles>, IAccountStock {
   getStockHistory: typeof getStockHistoryAction;
@@ -41,6 +48,9 @@ interface IProps extends WithStyles<typeof styles>, IAccountStock {
 interface IState {
   count: number;
 }
+
+const BuyControls = withStockControls(BuyButton, buyStocksAction);
+const SellControls = withStockControls(SellButton, sellStocksAction);
 
 class StockItem extends Component<IProps, IState> {
   constructor(props: IProps) {
@@ -52,8 +62,6 @@ class StockItem extends Component<IProps, IState> {
   }
 
   handleTabChange = () => {};
-
-  componentDidMount() {}
 
   handleChange = (event: ChangeEvent<{}>, expanded: boolean) => {
     const { id, getStockHistory } = this.props;
@@ -81,6 +89,7 @@ class StockItem extends Component<IProps, IState> {
     ) as IStockHistory;
 
     const percent: number = +(price / (price - priceDelta)).toFixed(6);
+    const countLabel = `x${count}`;
 
     return (
       <ExpansionPanel className={classes.root} onChange={this.handleChange}>
@@ -99,6 +108,7 @@ class StockItem extends Component<IProps, IState> {
                 <Typography className={classes.stockCode} color="default">
                   {code}
                 </Typography>
+                {count && <Chip className={classes.count} label={countLabel} />}
               </Grid>
             </Grid>
             <Grid item>
@@ -119,22 +129,15 @@ class StockItem extends Component<IProps, IState> {
         </ExpansionPanelSummary>
 
         <ExpansionPanelDetails>
-          {!stockHistory ? 'Loading...' : <Chart data={stockHistory} />}
+          {!stockHistory ? <Stub /> : <Chart data={stockHistory} />}
         </ExpansionPanelDetails>
         <Divider />
         <ExpansionPanelActions>
-          <StockControls />
+          {count ? <SellControls id={id} /> : <BuyControls id={id} />}
         </ExpansionPanelActions>
       </ExpansionPanel>
     );
   }
 }
 
-const mapStateToProps = (state: IReduxState) => ({
-  histories: state.histories
-});
-
-export default connect(
-  mapStateToProps,
-  { getStockHistory: getStockHistoryAction }
-)(withStyles(styles)(StockItem));
+export default withStyles(styles)(StockItem);
