@@ -1,17 +1,11 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
-import { IRefresh, ITransactionQuery } from '../constants/interfaces';
-
-interface IUser {
-  login?: string;
-  password?: string;
-}
-
-interface IStocksListInfo {
-  search?: string;
-  count?: number;
-  itemId?: number;
-}
+import {
+  IRefresh,
+  ITransactionQuery,
+  IUserAuth,
+  IStocksQuery
+} from '../constants/interfaces';
 
 export default class Api {
   private http: AxiosInstance;
@@ -23,11 +17,11 @@ export default class Api {
     });
   }
 
-  signUp(user: IUser) {
+  signUp(user: IUserAuth) {
     return this.http.post('/auth/signup', user, {});
   }
 
-  signIn(user: IUser) {
+  signIn(user: IUserAuth) {
     return this.http.post('/auth/signin', user);
   }
 
@@ -39,7 +33,7 @@ export default class Api {
     return this.http.get('/account/info');
   }
 
-  getStocks(stocksListInfo: IStocksListInfo) {
+  getStocks(stocksListInfo: IStocksQuery) {
     return this.http.get(`/stocks`);
   }
 
@@ -55,7 +49,7 @@ export default class Api {
     return this.http.post('/transaction/sell', transQuery);
   }
 
-  getTransactions(query: IStocksListInfo) {
+  getTransactions(query: IStocksQuery) {
     return this.http.get(`/transaction/history`);
   }
 }

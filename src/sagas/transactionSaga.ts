@@ -8,8 +8,12 @@ import { IStockHistoryQuery, ITransactionQuery } from '../constants/interfaces';
 import {
   buyStocksSucceededAction,
   sellStocksSucceededAction,
-  getTransactionsSucceededAction
+  getTransactionsSucceededAction,
+  getTransactionsAction
 } from '../actions/transactionActions';
+
+import { getAccountInfoAction } from '../actions/accountActions';
+
 import { IStocksQuery } from '../constants/interfaces';
 
 import setAuthToken from '../utils/setAuthToken';
@@ -48,6 +52,7 @@ export function* sellStocks(action: { type: string; payload: ITransactionQuery }
     const res = yield call(() => api.sellStocks(action.payload));
 
     yield put(sellStocksSucceededAction());
+    yield put(getAccountInfoAction());
     console.log(res);
   } catch (e) {
     console.log(e);
@@ -57,11 +62,10 @@ export function* sellStocks(action: { type: string; payload: ITransactionQuery }
 export function* buyStocks(action: { type: string; payload: ITransactionQuery }) {
   try {
     yield put(refreshToken({ refreshToken: getRefreshToken() }));
-
     const res = yield call(() => api.buyStocks(action.payload));
 
     yield put(buyStocksSucceededAction());
-    console.log(res);
+    yield put(getAccountInfoAction());
   } catch (e) {
     console.log(e);
   }

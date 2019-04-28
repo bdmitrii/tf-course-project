@@ -1,12 +1,7 @@
 import { put, call, takeEvery } from 'redux-saga/effects';
 
 import { refreshToken } from '../actions/authActions';
-import {
-  GET_STOCKS,
-  GET_STOCKS_SUCCEEDED,
-  GET_STOCK_HISTORY_SUCCEEDED,
-  GET_STOCK_HISTORY
-} from '../constants/actionTypes';
+import { GET_STOCKS, GET_STOCK_HISTORY } from '../constants/actionTypes';
 
 import { IStockHistoryQuery } from '../constants/interfaces';
 
