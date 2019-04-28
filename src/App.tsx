@@ -18,6 +18,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 import { setAuthAction } from './actions/authActions';
 import setAuthToken from './utils/setAuthToken';
+import MainPage from './components/mainPage/MainPage';
 
 if (window.localStorage.getItem('accessToken')) {
   const token = window.localStorage.getItem('accessToken');
@@ -33,6 +34,7 @@ class App extends Component {
         <Router>
           <CssBaseline />
           <Navbar />
+          <Route path="/" exact component={MainPage} />
           <Route path="/signin" component={SignIn} />
           <Route path="/signup" component={SignUp} />
           <Route path="/stocks" component={Stocks} />
