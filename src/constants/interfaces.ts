@@ -27,6 +27,10 @@ export interface IState {
   error: string;
   histories: Array<IStockHistory>;
   account: IAccountInfo;
+  transactions: {
+    loading: boolean;
+    items: ITransactions;
+  };
 }
 
 export interface IRefresh {
@@ -79,4 +83,31 @@ export interface IStocks {
   nextItemsId: number;
   prevItemId: number;
   items: Array<IStock>;
+}
+
+export interface ITransactionQuery {
+  amount: number;
+  stockId: number;
+}
+
+export interface ITransactionStock {
+  id: number;
+  code: string;
+  name: string;
+  iconUrl: string;
+}
+
+export interface ITransaction {
+  transactionId: number;
+  stock: ITransactionStock;
+  amount: number;
+  totalPrice: number;
+  date: string;
+  type: string;
+}
+
+export interface ITransactions {
+  nextItemId: number;
+  prevItemId: number;
+  items: ITransaction[];
 }

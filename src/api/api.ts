@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
-import { IRefresh } from '../constants/interfaces';
+import { IRefresh, ITransactionQuery } from '../constants/interfaces';
 
 interface IUser {
   login?: string;
@@ -13,17 +13,12 @@ interface IStocksListInfo {
   itemId?: number;
 }
 
-const mocksURL = 'https://stocks-mocks.herokuapp.com/api';
-const back1 = 'https://warm-citadel-97897.herokuapp.com/api';
-const back2 = 'https://stocks-store-202.herokuapp.com/api';
-const back3 = 'http://secret-hamlet-78538.herokuapp.com';
-
 export default class Api {
   private http: AxiosInstance;
 
   constructor() {
     this.http = axios.create({
-      baseURL: back1,
+      baseURL: 'https://warm-citadel-97897.herokuapp.com/api',
       headers: { 'Content-Type': 'application/json' }
     });
   }
@@ -50,5 +45,17 @@ export default class Api {
 
   getStockHistory(id: number) {
     return this.http.get(`/stocks/${id}/history`);
+  }
+
+  buyStocks(transQuery: ITransactionQuery) {
+    return this.http.post(`/transaction/buy`, transQuery);
+  }
+
+  sellStocks(transQuery: ITransactionQuery) {
+    return this.http.post('/transaction/sell', transQuery);
+  }
+
+  getTransactions(query: IStocksListInfo) {
+    return this.http.get(`/transaction/history`);
   }
 }
