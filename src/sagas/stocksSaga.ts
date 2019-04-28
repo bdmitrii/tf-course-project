@@ -1,17 +1,21 @@
 import { put, call, takeEvery } from 'redux-saga/effects';
 
 import { refreshToken } from '../actions/authActions';
-import { GET_STOCKS, GET_STOCK_HISTORY } from '../constants/actionTypes';
+import {
+  GET_STOCKS,
+  GET_STOCK_HISTORY,
+  STOCKS_LOAD_MORE
+} from '../constants/actionTypes';
 
 import { IStockHistoryQuery } from '../constants/interfaces';
 
 import {
   getStocksSucceededAction,
-  getStockHistorySucceededAction
+  getStockHistorySucceededAction,
+  stocksLoadMoreSucceededAction
 } from '../actions/stocksActions';
 import { IStocksQuery } from '../constants/interfaces';
 
-import setAuthToken from '../utils/setAuthToken';
 import { getRefreshToken } from '../utils/localStorage';
 import API from '../api';
 
@@ -23,7 +27,24 @@ export function* watchGetStocks() {
 
 export function* watchGetStockHistory() {
   yield takeEvery(GET_STOCK_HISTORY, getStockHistory);
-  console.log('History');
+}
+
+export function* watchStockLoadMore() {
+  yield takeEvery(STOCKS_LOAD_MORE, stocksLoadMore);
+}
+
+export function* stocksLoadMore(action: { type: string; payload: IStocksQuery }) {
+  try {
+    yield put(refreshToken({ refreshToken: getRefreshToken() }));
+    const res = yield call(() => api.getStocks(action.payload));
+
+    yield put(stocksLoadMoreSucceededAction(res.data));
+  } catch (err) {
+    console.log(err.response);
+    if (err.response.data.code === '400') {
+      yield put(refreshToken({ refreshToken: getRefreshToken() }));
+    }
+  }
 }
 
 export function* getStocks(action: { type: string; payload: IStocksQuery }): any {

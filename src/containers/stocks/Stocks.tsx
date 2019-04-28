@@ -28,10 +28,18 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 class Stocks extends Component<IProps> {
+  handleScroll = (event: any) => {
+    console.log(
+      window.pageYOffset,
+      document.documentElement.scrollHeight - document.documentElement.clientHeight
+    );
+  };
+
   componentDidMount() {
-    // debugger;
     const { getStocks } = this.props;
-    getStocks({ search: '', count: 6, itemId: 1 });
+    getStocks({ search: '', count: 8, itemId: 1 });
+
+    window.addEventListener('scroll', this.handleScroll);
   }
 
   render() {
@@ -39,13 +47,19 @@ class Stocks extends Component<IProps> {
 
     return (
       <div className={classes.root}>
-        <Grid container>
-          <Grid item md={6} sm={12} xs={12}>
-            <StocksHeader />
-            <AllStocksList />
+        <Grid container direction="row" spacing={8}>
+          <Grid item container direction="column" md={6} sm={12} xs={12} spacing={8}>
+            <Grid item>
+              <StocksHeader />
+            </Grid>
+            <Grid item>
+              <AllStocksList />
+            </Grid>
           </Grid>
-          <Grid item md={6} sm={12} xs={12}>
-            <Account />
+          <Grid container item direction="column" md={6} sm={12} xs={12}>
+            <Grid item>
+              <Account />
+            </Grid>
           </Grid>
         </Grid>
       </div>

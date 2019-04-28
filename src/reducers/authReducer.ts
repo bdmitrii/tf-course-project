@@ -1,7 +1,7 @@
 import { SET_AUTH } from '../constants/actionTypes';
 import { IAuthenticated } from '../constants/interfaces';
 
-const initState = {
+const initState: IAuthenticated = {
   isAuthenticated: false
 };
 
