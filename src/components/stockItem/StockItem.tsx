@@ -88,7 +88,9 @@ class StockItem extends Component<IProps, IState> {
       h => h.stockId === id
     ) as IStockHistory;
 
-    const percent: number = +(price / (price - priceDelta)).toFixed(6);
+    const percent: number = +(Math.abs(1 - price / (price - priceDelta)) * 100).toFixed(
+      6
+    );
     const countLabel = `x${count}`;
 
     return (
@@ -120,7 +122,7 @@ class StockItem extends Component<IProps, IState> {
                     [classes.priceDeltaNeg]: priceDelta < 0
                   })}
                 >
-                  {priceDelta >= 0 ? `+${priceDelta}` : `-${priceDelta}`}
+                  {priceDelta >= 0 ? `+${priceDelta}` : `${priceDelta}`}
                   {percent > 0 && ` (${percent}%)`}
                 </Typography>
               </Grid>

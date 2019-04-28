@@ -2,6 +2,7 @@ import React from 'react';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import grey from '@material-ui/core/colors/grey';
 import pink from '@material-ui/core/colors/indigo';
+import blue from '@material-ui/core/colors/blue';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 const theme = createMuiTheme({
@@ -22,6 +23,15 @@ const theme = createMuiTheme({
     useNextVariants: true
   },
   overrides: {
+    MuiTabs: {
+      root: {
+        backgroundColor: '#fafeff'
+      },
+      indicator: {
+        backgroundColor: '#86c232',
+        height: 4
+      }
+    },
     MuiPaper: {
       root: {
         backgroundColor: '#fafeff'

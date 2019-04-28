@@ -11,10 +11,10 @@ export default (theme: Theme) =>
         width: 400,
         marginLeft: 'auto',
         marginRight: 'auto'
-      }
+      },
+      marginTop: theme.spacing.unit * 15
     },
     paper: {
-      marginTop: theme.spacing.unit * 15,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',

@@ -34,7 +34,11 @@ export default class Api {
   }
 
   getStocks(stocksListInfo: IStocksQuery) {
-    return this.http.get(`/stocks`);
+    return this.http.get(
+      `/stocks?search=${stocksListInfo.search}&count=${stocksListInfo.count}&itemId=${
+        stocksListInfo.itemId
+      }`
+    );
   }
 
   getStockHistory(id: number) {

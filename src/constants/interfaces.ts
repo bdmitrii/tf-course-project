@@ -77,7 +77,7 @@ export interface IStockHistoryQuery {
 }
 
 export interface IStocks {
-  nextItemsId: number;
+  nextItemId: number;
   prevItemId: number;
   items: Array<IStock>;
 }

@@ -3,7 +3,7 @@ import { Theme, createStyles } from '@material-ui/core/styles';
 export default (theme: Theme) =>
   createStyles({
     root: {
-      padding: theme.spacing.unit
+      // padding: theme.spacing.unit
     },
     paper: {
       padding: theme.spacing.unit * 2

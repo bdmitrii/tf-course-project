@@ -4,7 +4,7 @@ export default (theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      padding: theme.spacing.unit,
+      // padding: theme.spacing.unit,
       minHeight: theme.spacing.unit * 40
       // maxHeight: theme.spacing.unit * 80
     },

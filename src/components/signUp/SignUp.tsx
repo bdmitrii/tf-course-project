@@ -8,6 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
 
 import { validatePassword } from '../../utils/validation';
 import { signUpAction } from '../../actions/authActions';
@@ -23,6 +24,7 @@ interface IProps extends WithStyles<typeof styles> {
   clearError: typeof clearErrorAction;
   signUp: typeof signUpAction;
   error: string | null;
+  className?: string;
 }
 
 interface IState {
@@ -77,11 +79,11 @@ class SignUp extends Component<IProps, IState> {
   }
 
   render() {
-    const { classes, error } = this.props;
+    const { classes, error, className } = this.props;
     const { login, password1, password2 } = this.state;
 
     return (
-      <main className={classes.main}>
+      <main className={classnames(classes.main, className)}>
         <CssBaseline />
         <Paper className={classes.paper}>
           <Typography component="h1" variant="h5">
