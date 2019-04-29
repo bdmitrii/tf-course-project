@@ -18,6 +18,8 @@ class Chart extends Component<IProps> {
     const { data, classes } = this.props;
     const { from, to, history, stockId } = data;
 
+    console.log(history);
+
     const prices: Array<number> = history.map(h => h.price) as Array<number>;
 
     const margin = { top: 50, right: 50, bottom: 0, left: 50 };
@@ -37,7 +39,7 @@ class Chart extends Component<IProps> {
 
     const parseHistoryDate = d3.utcParse('%Y-%m-%dT%H:%M:%S');
     const parseDate = d3.utcParse('%Y-%m-%dT%H:%M:%S.%L');
-    const formatDate = d3.timeFormat('%Y-%m-%d %H:%M:%S');
+    const formatDate = d3.timeFormat('%m-%d %H:%M:%S');
 
     const fromDate = new Date(formatDate(parseDate(from) as Date));
     const toDate = new Date(formatDate(parseDate(to) as Date));
@@ -54,7 +56,7 @@ class Chart extends Component<IProps> {
     const line = d3
       .line()
       .x((d: any) => {
-        // console.log(new Date(formatDate(parseHistoryDate(d.data) as Date)), d.data);
+        console.log(new Date(formatDate(parseHistoryDate(d.data) as Date)), d.data);
         return xScale(new Date(formatDate(parseHistoryDate(d.data) as Date)));
       })
       .y((d: any) => yScale(d.price));

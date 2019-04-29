@@ -6,16 +6,24 @@ import { withStyles, WithStyles } from '@material-ui/core/styles';
 
 import styles from './styles';
 
-interface IProps extends WithStyles<typeof styles> {}
+interface IProps extends WithStyles<typeof styles> {
+  textInfo?: string;
+}
 
 function Stub(props: IProps) {
-  const { classes } = props;
+  const { classes, textInfo } = props;
 
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper}>
-        <CircularProgress />
-      </Paper>
+      {textInfo ? (
+        <Paper className={classes.paper}>
+          <Typography>{textInfo}</Typography>
+        </Paper>
+      ) : (
+        <Paper className={classes.paper}>
+          <CircularProgress />
+        </Paper>
+      )}
     </div>
   );
 }

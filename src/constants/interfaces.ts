@@ -23,7 +23,7 @@ export interface IStock {
 
 export interface IState {
   auth: IAuthenticated;
-  allStocks: IStocks;
+  allStocks: IStateStocks;
   error: string;
   histories: Array<IStockHistory>;
   account: IAccountInfo;
@@ -74,6 +74,11 @@ export interface IStocksQuery {
 export interface IStockHistoryQuery {
   id: number;
   range?: string;
+}
+
+export interface IStateStocks extends IStocks {
+  search: string;
+  loading: boolean;
 }
 
 export interface IStocks {

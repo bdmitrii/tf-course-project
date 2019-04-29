@@ -1,18 +1,11 @@
 import React, { Component, Fragment } from 'react';
 
-import {
-  Paper,
-  Grid,
-  Typography,
-  List,
-  ListItem,
-  Divider,
-  InputBase
-} from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
 import { connect } from 'react-redux';
+import { IState as IReduxState } from '../../constants/interfaces';
 
-import { getStocksAction } from '../../actions/stocksActions';
+import { getStocksAction, stocksLoadMoreAction } from '../../actions/stocksActions';
 
 // import SearchIcon from '@material-ui/icons/';
 import StocksList from '../../components/stocksList/StocksList';
@@ -25,15 +18,57 @@ import AllStocksList from '../allStocksList/AllStocksList';
 
 interface IProps extends WithStyles<typeof styles> {
   getStocks: typeof getStocksAction;
+  stocksLoadMore: typeof stocksLoadMoreAction;
+  nextStockId: number;
+  prevStockId: number;
+  search: string;
 }
 
-class Stocks extends Component<IProps> {
+interface IState {
+  prevStockId: number;
+  nextStockId: number;
+  loaded: boolean;
+}
+
+class Stocks extends Component<IProps, IState> {
+  constructor(props: IProps) {
+    super(props);
+
+    this.state = {
+      prevStockId: 0,
+      nextStockId: 0,
+      loaded: false
+    };
+  }
+
   handleScroll = (event: any) => {
-    console.log(
-      window.pageYOffset,
-      document.documentElement.scrollHeight - document.documentElement.clientHeight
-    );
+    console.log('scroll');
+    const { stocksLoadMore, nextStockId, search } = this.props;
+    const { loaded } = this.state;
+
+    if (
+      window.pageYOffset ===
+        document.documentElement.scrollHeight - document.documentElement.clientHeight &&
+      !loaded
+    ) {
+      stocksLoadMore({ search, count: 8, itemId: nextStockId });
+    }
   };
+
+  componentDidUpdate(props: IProps, state: IState) {
+    const { nextStockId, prevStockId } = this.props;
+    const { loaded } = this.state;
+
+    console.log(props.prevStockId, props.nextStockId, prevStockId, nextStockId);
+
+    if (
+      props.prevStockId === prevStockId &&
+      props.nextStockId === nextStockId &&
+      !loaded
+    ) {
+      this.setState({ loaded: true });
+    }
+  }
 
   componentDidMount() {
     const { getStocks } = this.props;
@@ -67,7 +102,14 @@ class Stocks extends Component<IProps> {
   }
 }
 
+const mapStateToProps = (state: IReduxState) => ({
+  nextStockId: state.allStocks.nextItemId,
+  prevStockId: state.allStocks.prevItemId,
+  stocks: state.allStocks.items,
+  search: state.allStocks.search
+});
+
 export default connect(
-  null,
-  { getStocks: getStocksAction }
+  mapStateToProps,
+  { getStocks: getStocksAction, stocksLoadMore: stocksLoadMoreAction }
 )(withStyles(styles)(Stocks));

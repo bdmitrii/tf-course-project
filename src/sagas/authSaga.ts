@@ -48,7 +48,9 @@ export function* signUpAsync(action: { type: string; payload: IUserAuth }): any 
 
     // window.location.replace('/stocks');
   } catch (e) {
-    console.error(e);
+    const { code } = e.response.data;
+
+    yield put(setErrorAction(code));
   }
 }
 

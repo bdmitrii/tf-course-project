@@ -55,7 +55,7 @@ class StocksList extends Component<IProps> {
               />
             ))
           ) : (
-            <Stub />
+            <Stub textInfo="Нет акций" />
           )}
         </div>
       </div>

@@ -4,7 +4,8 @@ import {
   GET_STOCKS_SUCCEEDED,
   GET_STOCK_HISTORY_SUCCEEDED,
   STOCKS_LOAD_MORE,
-  STOCKS_LOAD_MORE_SUCCEEDED
+  STOCKS_LOAD_MORE_SUCCEEDED,
+  STOCKS_SET_SEARCH
 } from '../constants/actionTypes';
 
 import {
@@ -42,9 +43,10 @@ export function getStockHistorySucceededAction(stock: IStockHistory) {
   };
 }
 
-export function stocksLoadMoreAction() {
+export function stocksLoadMoreAction(query: IStocksQuery) {
   return {
-    type: STOCKS_LOAD_MORE
+    type: STOCKS_LOAD_MORE,
+    payload: query
   };
 }
 
@@ -52,5 +54,12 @@ export function stocksLoadMoreSucceededAction(stocks: IStocks) {
   return {
     type: STOCKS_LOAD_MORE_SUCCEEDED,
     payload: stocks
+  };
+}
+
+export function setStocksSearchAciton(search: string) {
+  return {
+    type: STOCKS_SET_SEARCH,
+    payload: { search }
   };
 }
