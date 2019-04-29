@@ -1,55 +1,26 @@
-import React, { Component, ChangeEvent } from 'react';
+import React, { Component } from 'react';
 
-import { connect } from 'react-redux';
-
-import {
-  ExpansionPanelActions,
-  ExpansionPanelSummary,
-  ExpansionPanel,
-  Grid,
-  Typography,
-  Button,
-  ExpansionPanelDetails,
-  Divider,
-  Tabs,
-  Tab,
-  Chip,
-  ListItem
-} from '@material-ui/core';
-
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { Grid, Typography, Chip, ListItem } from '@material-ui/core';
 
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 import classnames from 'classnames';
 
-import {
-  IStock,
-  IState as IReduxState,
-  IStockHistory,
-  IAccountStock
-} from '../../constants/interfaces';
-import { getStockHistoryAction } from '../../actions/stocksActions';
-import { buyStocksAction, sellStocksAction } from '../../actions/transactionActions';
+import { ITransactionStock } from '../../constants/interfaces';
 
 import styles from './styles';
-import Stub from '../common/stub/Stub';
-// import StockControls from './StockControls';
 
-import BuyButton from '../stockControls/buyButton/BuyButton';
-import withStockControls from '../stockControls/withStockControls';
-import SellButton from '../stockControls/sellButton/SellButton';
-
-interface IProps extends WithStyles<typeof styles>, IAccountStock {
-  getStockHistory: typeof getStockHistoryAction;
-  histories: Array<IStockHistory>;
+interface IProps extends WithStyles<typeof styles> {
+  transactionId: number;
+  stock: ITransactionStock;
+  amount: number;
+  totalPrice: number;
+  date: string;
+  type: string;
 }
 
 interface IState {
   count: number;
 }
-
-const BuyControls = withStockControls(BuyButton, buyStocksAction);
-const SellControls = withStockControls(SellButton, sellStocksAction);
 
 class StockItem extends Component<IProps, IState> {
   constructor(props: IProps) {
@@ -60,37 +31,56 @@ class StockItem extends Component<IProps, IState> {
     };
   }
 
-  handleTabChange = () => {};
-
-  handleChange = (event: ChangeEvent<{}>, expanded: boolean) => {
-    const { id, getStockHistory } = this.props;
-
-    if (expanded) {
-      getStockHistory({ id });
-    }
-  };
-
   render() {
-    const {
-      classes,
-      name,
-      price,
-      priceDelta,
-      code,
-      iconUrl,
-      histories,
-      id,
-      count
-    } = this.props;
+    const { classes, stock, totalPrice, amount, type, date } = this.props;
 
-    const stockHistory: IStockHistory = histories.find(
-      h => h.stockId === id
-    ) as IStockHistory;
+    const formattedDate = new Date(date);
 
-    const percent: number = +(price / (price - priceDelta)).toFixed(6);
-    const countLabel = `x${count}`;
+    const year = formattedDate.getFullYear();
+    const month = formattedDate.getMonth();
+    const d = formattedDate.getDate();
+    const hour = formattedDate.getHours();
+    const minutes = formattedDate.getMinutes();
 
-    return <ListItem />;
+    return (
+      <ListItem>
+        <Grid container direction="row" alignItems="center" spacing={16}>
+          <Grid item>
+            <div
+              className={classes.stockIcon}
+              style={{
+                backgroundImage: `url(${stock.iconUrl})`,
+                backgroundSize: 'contain'
+              }}
+            />
+          </Grid>
+          <Grid item>
+            <Typography className={classes.stockName}>{stock.name}</Typography>
+          </Grid>
+          <Grid item>
+            <Chip label={`x${amount}`} />
+          </Grid>
+          <Grid item className={classes.type}>
+            <Typography
+              className={classnames({
+                [classes.priceDeltaNeg]: type === 'buy',
+                [classes.priceDeltaPos]: type === 'sell'
+              })}
+            >
+              {type === 'buy' ? 'Покупка' : 'Продажа'}
+            </Typography>
+          </Grid>
+          <Grid item className={classes.type}>
+            <Typography>
+              {d}-{month}-{year} {hour}:{minutes}
+            </Typography>
+          </Grid>
+          <Grid item className={classes.prices}>
+            <Typography className={classes.stockPrice}>{totalPrice} RUB</Typography>
+          </Grid>
+        </Grid>
+      </ListItem>
+    );
   }
 }
 

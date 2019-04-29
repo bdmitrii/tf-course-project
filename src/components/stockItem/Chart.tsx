@@ -14,11 +14,8 @@ class Chart extends Component<IProps> {
   componentDidMount() {
     // if (!this.props.data) return;
 
-    console.log(this.props);
     const { data, classes } = this.props;
     const { from, to, history, stockId } = data;
-
-    console.log(history);
 
     const prices: Array<number> = history.map(h => h.price) as Array<number>;
 
@@ -56,7 +53,6 @@ class Chart extends Component<IProps> {
     const line = d3
       .line()
       .x((d: any) => {
-        console.log(new Date(formatDate(parseHistoryDate(d.data) as Date)), d.data);
         return xScale(new Date(formatDate(parseHistoryDate(d.data) as Date)));
       })
       .y((d: any) => yScale(d.price));

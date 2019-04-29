@@ -4,10 +4,12 @@ import {
   BUY_STOCKS_SUCCEEDED,
   SELL_STOCKS_SUCCEEDED,
   GET_TRANSACTIONS,
-  GET_TRANSACTIONS_SUCCEEDED
+  GET_TRANSACTIONS_SUCCEEDED,
+  TRANSACTIONS_LOAD_MORE,
+  TRANSACTIONS_LOAD_MORE_SUCCEEDED
 } from '../constants/actionTypes';
 
-import { ITransactionQuery, ITransactions } from '../constants/interfaces';
+import { ITransactionQuery, ITransactions, IStocksQuery } from '../constants/interfaces';
 
 export function buyStocksAction(query: ITransactionQuery) {
   return {
@@ -35,15 +37,30 @@ export function sellStocksSucceededAction() {
   };
 }
 
-export function getTransactionsAction() {
+export function getTransactionsAction(query: IStocksQuery) {
   return {
-    type: GET_TRANSACTIONS
+    type: GET_TRANSACTIONS,
+    payload: query
   };
 }
 
 export function getTransactionsSucceededAction(payload: ITransactions) {
   return {
     type: GET_TRANSACTIONS_SUCCEEDED,
+    payload
+  };
+}
+
+export function transactionsLoadMoreAction(payload: IStocksQuery) {
+  return {
+    type: TRANSACTIONS_LOAD_MORE,
+    payload
+  };
+}
+
+export function transactionsLoadMoreActionSucceeded(payload: ITransactions) {
+  return {
+    type: TRANSACTIONS_LOAD_MORE_SUCCEEDED,
     payload
   };
 }

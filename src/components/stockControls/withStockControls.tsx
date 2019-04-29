@@ -70,7 +70,6 @@ function withStockControls(Button: any, controlsAction: Function) {
     };
 
     handleClick = () => {
-      console.log('click');
       const { count } = this.state;
       const { id, controlsAction } = this.props;
 

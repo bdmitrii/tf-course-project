@@ -2,7 +2,9 @@ import { Theme, createStyles } from '@material-ui/core/styles';
 
 export default (theme: Theme) =>
   createStyles({
-    root: {},
+    root: {
+      display: 'flex'
+    },
     paper: {
       padding: theme.spacing.unit * 2
     },
@@ -11,12 +13,12 @@ export default (theme: Theme) =>
     },
     stockName: {
       fontSize: '18px',
-      fontWeight: 700,
-      marginRight: theme.spacing.unit
+      minWidth: 120
     },
     stockPrice: {
       fontSize: '18px',
-      fontWeight: 400
+      fontWeight: 400,
+      minWidth: 100
     },
     stockPriceDelta: {
       fontSize: '16px'
@@ -35,23 +37,18 @@ export default (theme: Theme) =>
       marginLeft: 10
     },
     stockIcon: {
-      width: '40px',
-      height: '40px',
+      width: '20px',
+      height: '20px',
       borderRadius: '50%',
-      backgroundColor: theme.palette.grey[500],
-      marginRight: theme.spacing.unit * 2
-    },
-    line: {
-      fill: 'none',
-      stroke: 'steelblue',
-      strokeWidth: '1.5px',
-      strokeLinejoin: 'round',
-      strokeLinecap: 'round'
+      backgroundColor: theme.palette.grey[500]
     },
     countInput: {
       width: 40,
       backgroundColor: theme.palette.grey[100],
       padding: '0 5px',
       borderRadius: 4
+    },
+    type: {
+      marginLeft: 'auto'
     }
   });

@@ -53,6 +53,9 @@ export default class Api {
   }
 
   getTransactions(query: IStocksQuery) {
-    return this.http.get(`/transaction/history`);
+    return this.http.get(
+      `/transaction/history?search=${query.search || ''}&itemId=${query.itemId ||
+        ''}&count=${query.count || ''}`
+    );
   }
 }

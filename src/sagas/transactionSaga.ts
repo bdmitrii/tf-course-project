@@ -1,7 +1,12 @@
 import { put, call, takeEvery } from 'redux-saga/effects';
 
 import { refreshToken } from '../actions/authActions';
-import { BUY_STOCKS, SELL_STOCKS, GET_TRANSACTIONS } from '../constants/actionTypes';
+import {
+  BUY_STOCKS,
+  SELL_STOCKS,
+  GET_TRANSACTIONS,
+  TRANSACTIONS_LOAD_MORE
+} from '../constants/actionTypes';
 
 import { IStockHistoryQuery, ITransactionQuery } from '../constants/interfaces';
 
@@ -9,7 +14,8 @@ import {
   buyStocksSucceededAction,
   sellStocksSucceededAction,
   getTransactionsSucceededAction,
-  getTransactionsAction
+  getTransactionsAction,
+  transactionsLoadMoreActionSucceeded
 } from '../actions/transactionActions';
 
 import { getAccountInfoAction } from '../actions/accountActions';
@@ -34,6 +40,24 @@ export function* watchBuyStock() {
   yield takeEvery(BUY_STOCKS, buyStocks);
 }
 
+export function* watchTransactionsLoadMore() {
+  yield takeEvery(TRANSACTIONS_LOAD_MORE, transactionsLoadMore);
+}
+
+export function* transactionsLoadMore(action: {
+  type: string;
+  payload: IStocksQuery;
+}): any {
+  try {
+    yield put(refreshToken({ refreshToken: getRefreshToken() }));
+    const res = yield call(() => api.getTransactions(action.payload));
+
+    yield put(transactionsLoadMoreActionSucceeded(res.data));
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 export function* getTransactions(action: { type: string; payload: IStocksQuery }): any {
   try {
     yield put(refreshToken({ refreshToken: getRefreshToken() }));
@@ -53,7 +77,7 @@ export function* sellStocks(action: { type: string; payload: ITransactionQuery }
 
     yield put(sellStocksSucceededAction());
     yield put(getAccountInfoAction());
-    console.log(res);
+    yield put(getTransactionsAction({ count: 20 }));
   } catch (e) {
     console.log(e);
   }
@@ -66,6 +90,7 @@ export function* buyStocks(action: { type: string; payload: ITransactionQuery })
 
     yield put(buyStocksSucceededAction());
     yield put(getAccountInfoAction());
+    yield put(getTransactionsAction({ count: 20 }));
   } catch (e) {
     console.log(e);
   }

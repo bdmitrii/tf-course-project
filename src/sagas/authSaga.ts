@@ -25,7 +25,6 @@ export function* watchLogout() {
 }
 
 export function* logout() {
-  console.log('logout');
   removeTokensFromStorage();
 
   setAuthToken(false);

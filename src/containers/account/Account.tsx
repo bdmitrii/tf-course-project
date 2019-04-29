@@ -10,7 +10,7 @@ import { IState as IReduxState, IAccountInfo } from '../../constants/interfaces'
 import { getAccountInfoAction } from '../../actions/accountActions';
 import AccountStocksList from '../accountStocksList/AccountStocksList';
 import Stub from '../../components/common/stub/Stub';
-import TransactionList from '../transactionList/TransactionList';
+import TransactionList from '../transactions/Transactions';
 
 import styles from './styles';
 
@@ -69,7 +69,10 @@ class Account extends Component<IProps, IState> {
                 </Tabs>
               </AppBar>
             </Grid>
-            <Grid item>{tabIndex === 0 && <AccountStocksList />}</Grid>
+            <Grid item>
+              {tabIndex === 0 && <AccountStocksList />}
+              {tabIndex === 1 && <TransactionList />}
+            </Grid>
           </Grid>
         </Grid>
       </div>

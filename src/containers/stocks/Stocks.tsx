@@ -42,7 +42,6 @@ class Stocks extends Component<IProps, IState> {
   }
 
   handleScroll = (event: any) => {
-    console.log('scroll');
     const { stocksLoadMore, nextStockId, search } = this.props;
     const { loaded } = this.state;
 
@@ -58,8 +57,6 @@ class Stocks extends Component<IProps, IState> {
   componentDidUpdate(props: IProps, state: IState) {
     const { nextStockId, prevStockId } = this.props;
     const { loaded } = this.state;
-
-    console.log(props.prevStockId, props.nextStockId, prevStockId, nextStockId);
 
     if (
       props.prevStockId === prevStockId &&

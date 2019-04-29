@@ -1,4 +1,8 @@
-import { GET_TRANSACTIONS_SUCCEEDED, GET_TRANSACTIONS } from '../constants/actionTypes';
+import {
+  GET_TRANSACTIONS_SUCCEEDED,
+  GET_TRANSACTIONS,
+  TRANSACTIONS_LOAD_MORE
+} from '../constants/actionTypes';
 import { ITransaction, IStateTransactions, ITransactions } from '../constants/interfaces';
 
 const initState: IStateTransactions = {
@@ -25,7 +29,11 @@ export const transactionsReducer = (
         loading: false,
         history: action.payload
       };
-
+    case TRANSACTIONS_LOAD_MORE:
+      return {
+        ...state,
+        items: [...state.history.items]
+      };
     default:
       return state;
   }
